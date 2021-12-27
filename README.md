@@ -13,3 +13,7 @@ Materials used in the project.
    7) TCS3200 Color sensor board
    8) HR -SR04 Distance sensor  board
    9) Other fasteners used for assembly
+
+
+![image](https://user-images.githubusercontent.com/80620991/147467260-75b6973e-1bc7-4c30-943a-98267f2bbc38.png)
+
