@@ -12,23 +12,23 @@ Servo servo6;
 #define servoPin4 5
 #define servoPin5 6
 #define servoPin6 10
-//HC-SR04 mesafe sensörü
+//HC-SR04 Distance sensor 
 #define trigPin 50
 #define ecoPin 52
 
-//Konveyör bant
-#define konveyor_Ileri 40
-#define konveyor_Geri 38
-#define hiz 10
+//Conveyor Belt 
+#define conveyor_forward 40
+#define conveyor_back 38
+#define speed 10
 
-//Renk sönsörü
+//Color Sensor
 #define s0 28
 #define s1 30
 #define s2 32
 #define s3 34
 #define out 36
-int kirmizi, yesil, mavi;
-String renk;
+int red, green, blue;
+String color;
 
 long distance,duration;
 void setup()
@@ -49,8 +49,8 @@ void setup()
   digitalWrite(s1, LOW);
 
 
-  pinMode(konveyor_Ileri,OUTPUT); //out
-  pinMode(konveyor_Geri,OUTPUT); //out
+  pinMode(conveyor_forward,OUTPUT); //out
+  pinMode(conveyor_back,OUTPUT); //out
   pinMode(hiz,OUTPUT); //out
  
   pinMode(trigPin, OUTPUT);
@@ -60,102 +60,98 @@ void setup()
 }
 void loop()
 {
-   analogWrite(hiz,160);//bant hızını ayarlıyor
-//KalibreEt();
-  KalibreEdildi();
-  digitalWrite(konveyor_Ileri,HIGH);
-  digitalWrite(konveyor_Geri,LOW);
-MesafeOlcme();   
+   analogWrite(hiz,160);//band speed is adjusted
+//Calibrate();
+  Calibrated();
+  digitalWrite(conveyor_forward,HIGH);
+  digitalWrite(conveyor_back,LOW);
+MeasuringDistance();   
 
    if (distance <4)
   {
-  RenkBelirle();
-    if (renk == "kirmizi")
+  SetColor();
+    if (renk == "red")
     {
     analogWrite(hiz,0);
-    Serial.println("kırmızı1111");
+    Serial.println("red1111");
       
-      Servo1_Kapat();
+      Servo1_close();
       delay(50);
-      Servo2_Geri(90);
+      Servo2_back(90);
       delay(50);   
-      Servo3_Sol();
+      Servo3_left();
       delay(50); 
-      Servo1_Ac();
+      Servo1_open();
       delay(50);         
-      Servo3_Sag();
+      Servo3_right();
       delay(50);        
-      Servo2_Ileri(90);
+      Servo2_forward(90);
       delay(50);
    
     }
-  else  if (renk == "yesil")
+  else  if (color == "green")
     {
-   analogWrite(hiz,0);
-   Serial.println("yeşil");
+   analogWrite(speed,0);
+   Serial.println("green");
       
       
-      Servo1_Kapat();
+      Servo1_close();
       delay(50);
-      Servo2_Geri(60);
+      Servo2_back(60);
       delay(50);   
-      Servo3_Sol();
+      Servo3_left();
       delay(50); 
-      Servo1_Ac();
+      Servo1_open();
       delay(50);         
-      Servo3_Sag();
-      delay(50);        
-      Servo2_Ileri(60);
+      Servo3_right();
+      delay(50); 
+      Servo2_forward(60);
       delay(50);
    
    
     }
-    else if (renk == "mavi")
+    else if (color == "blue")
     {
-      analogWrite(hiz,0);
-      Serial.println("mavi");
+      analogWrite(speed,0);
+      Serial.println("blue");
       
       
-      Servo1_Kapat();
+      Servo1_close();
       delay(50);
-      Servo2_Geri(30);
+      Servo2_back(30);
       delay(50);   
-      Servo3_Sol();
+      Servo3_left();
       delay(50); 
-      Servo1_Ac();
+      Servo1_open();
       delay(50);         
-      Servo3_Sag();
+      Servo3_right();
       delay(50);        
-      Servo2_Ileri(30);
-      delay(50);
-   
-   
+      Servo2_forward(30);
+      delay(50);   
    
     }
 delay(200);
   }
-  
-
 }
 
-void RenkBelirle()
+void SetColor()
 {
-  if (kirmizi < 60)
+  if (red < 60)
   {
-    renk="kirmizi";
+    color="red";
   }
-  else if (yesil < 60)
+  else if (green < 60)
   {
-     renk="yesil";
+     color="green";
    }
-  else if (mavi < 60)
+  else if (blue < 60)
   {
-     renk="mavi";
+     color="blue";
   }
   delay(100);
 }
 
-void MesafeOlcme()
+void MeasuringDistance()
 {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -167,7 +163,7 @@ void MesafeOlcme()
   distance = duration * 0, 034 / 2;
   Serial.println("distance : " + distance);
 }
-void Servo1_Ac()
+void Servo1_open()
 {
   for (int i = 0; i < 90; i++)
   {
@@ -175,7 +171,7 @@ void Servo1_Ac()
     delay(50);
   }
 }
-void Servo1_Kapat()
+void Servo1_close()
 {
   for (int i = 90; i > 0; i--)
   {
@@ -183,7 +179,7 @@ void Servo1_Kapat()
     delay(50);
   }
 }
-void Servo2_Geri(int deger)
+void Servo2_back(int value)
 {
   for (int i = deger; i >0; i--)
   {
@@ -191,15 +187,15 @@ void Servo2_Geri(int deger)
     delay(50);
   }
 }
-void Servo2_Ileri(int deger)
+void Servo2_forward(int value)
 {
-  for (int i = 0; i <deger; i++)
+  for (int i = 0; i <value; i++)
   {
    servo2.write(i);
     delay(50);
   }
 }
-void Servo3_Sag()
+void Servo3_right()
 {
   for (int i = 0; i <90; i++)
   {
@@ -207,7 +203,7 @@ void Servo3_Sag()
     delay(50);
   }
 }
-void Servo3_Sol()
+void Servo3_left()
 {
   for (int i = 90; i >0; i--)
   {
@@ -215,52 +211,52 @@ void Servo3_Sol()
     delay(50);
   }
 }
-void KalibreEdildi()
+void Calibrated()
 {
   digitalWrite(s2, LOW);
   digitalWrite(s3, LOW);
-  kirmizi = pulseIn(out, LOW);
-  kirmizi = map(kirmizi, 50, 230, 0, 100);
+  red = pulseIn(out, LOW);
+  red = map(red, 50, 230, 0, 100);
   delay(100);
 
   digitalWrite(s2, HIGH);
   digitalWrite(s3, HIGH);
-  yesil = pulseIn(out, LOW);
-  yesil = map(yesil, 42, 210, 0, 100);
+  green = pulseIn(out, LOW);
+  green = map(green, 42, 210, 0, 100);
   delay(100);
 
   digitalWrite(s2, LOW);
   digitalWrite(s3, HIGH);
-  mavi = pulseIn(out, LOW);
-  mavi = map(mavi, 60, 220, 0, 100);
+  blue = pulseIn(out, LOW);
+  blue = map(blue, 60, 220, 0, 100);
   delay(100);
   Serial.println();
 }
 
 
-void KalibreEt()
+void Calibrated()
 {
   digitalWrite(s2, LOW);
   digitalWrite(s3, LOW);
-  kirmizi = pulseIn(out, LOW);
-  Serial.print("kırmızı");
-  Serial.print(kirmizi);
+  red = pulseIn(out, LOW);
+  Serial.print("red");
+  Serial.print(red);
   Serial.print("      ");
   delay(100);
 
   digitalWrite(s2, HIGH);
   digitalWrite(s3, HIGH);
-  yesil = pulseIn(out, LOW);
-  Serial.print("yesiı");
-  Serial.print(yesil);
+  green = pulseIn(out, LOW);
+  Serial.print("green");
+  Serial.print(green);
   Serial.print("      ");
   delay(100);
 
   digitalWrite(s2, LOW);
   digitalWrite(s3, HIGH);
-  mavi = pulseIn(out, LOW);
-  Serial.print("mavi");
-  Serial.print(mavi);
+  blue = pulseIn(out, LOW);
+  Serial.print("blue");
+  Serial.print(blue);
   Serial.print("      ");
   delay(100);
   Serial.println();
