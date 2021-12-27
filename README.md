@@ -15,5 +15,5 @@ Materials used in the project.
    9) Other fasteners used for assembly
 
 
-![image](https://user-images.githubusercontent.com/80620991/147467260-75b6973e-1bc7-4c30-943a-98267f2bbc38.png)
+![image](https://user-images.githubusercontent.com/80620991/147467260-75b6973e-1bc7-4c30-943a-98267f2bbc38.png) ![image](https://user-images.githubusercontent.com/80620991/147467363-c71cb632-4ebc-467a-9785-75b1fd62fee8.png)
 
